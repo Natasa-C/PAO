@@ -1,5 +1,6 @@
 import animals.*;
 import barns.*;
+import budget.Wallet;
 
 public class Farm {
     public static void main(String[] args) {
@@ -61,6 +62,18 @@ public class Farm {
 
         bm.displayBarnStatus();
         bm.displayTransactionHistory();
+
+//        WALLET TEST
+        System.out.println("\n\n\nWALLET test\n ");
+        Wallet wa = new Wallet("euro");
+        wa.addMoney(100);
+        wa.withdrawMoney(25);
+        wa.addMoney(2530);
+//        wa.addMoney(Integer.MAX_VALUE);
+        wa.withdrawMoney(10);
+        wa.withdrawMoney(3000);
+        wa.displayWalletStatus();
+        wa.displayTransactionHistory();
 
     }
 }
