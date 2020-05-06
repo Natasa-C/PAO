@@ -1,10 +1,21 @@
 package barns;
 
+import budget.Wallet;
+import datesAndReports.BuildHeader;
+import datesAndReports.BuildHeaderForBarn;
+import datesAndReports.BuildHeaderForWallet;
+import main.CSVprocesser;
+import main.Farm;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.time.LocalDate;
 
-public class Barn extends Building{
+public class Barn extends Building {
+    private static String dataFileName = "dataBarn.csv";
+    private static List<Barn> barnList = new ArrayList<>();
     private static Integer noBarns = 0;
     private final Integer barnIndex;
     private final Integer totalCapacity;
@@ -17,6 +28,23 @@ public class Barn extends Building{
         this.totalCapacity = length * height * width;
         noBarns++;
         this.barnIndex = noBarns;
+        barnList.add(this);
+
+        BuildHeader<Barn> headerBuilder = new BuildHeaderForBarn();
+        if (!Farm.checkIfCSVFileExists(dataFileName)) {
+            Farm.clearFile(dataFileName);
+            Farm.appendToFile(dataFileName, headerBuilder.getHeaderLine());
+        }
+
+        StringBuffer transactionMessage = new StringBuffer();
+        List<String> list = new ArrayList<>();
+        list.add(LocalDate.now().toString());
+        transactionMessage.append("operation: create barn, status: success");
+
+        list.add(transactionMessage.toString());
+        Farm.appendToReport(list);
+        Farm.appendToFile(dataFileName, headerBuilder.getEntryLine(this));
+        System.out.println(LocalDate.now().toString() + " " + transactionMessage);
     }
 
     public Integer getTotalCapacity() {
@@ -31,37 +59,62 @@ public class Barn extends Building{
         return barnIndex;
     }
 
+    public static List<Barn> getBarnList() {
+        return barnList;
+    }
+
     public void addToOccupiedCapacity(Integer capacity) {
         this.occupiedCapacity += capacity;
     }
 
     public void addInBarn(String produce, Integer quantity) {
-        if (getOccupiedCapacity() + quantity > getTotalCapacity()) {
-            System.out.println("Produce quantity too big to be stored in the barn.");
-            return;
-        }
+        StringBuffer transactionMessage = new StringBuffer();
+        List<String> list = new ArrayList<>();
+        list.add(LocalDate.now().toString());
+        transactionMessage.append("operation: addition, status: ");
 
-        String produceName = produce.toLowerCase();
-        if (produceAndQuantities.containsKey(produceName)) {
-            produceAndQuantities.replace(produceName, produceAndQuantities.get(produceName), produceAndQuantities.get(produceName) + quantity);
+        if (getOccupiedCapacity() + quantity > getTotalCapacity()) {
+            transactionMessage.append("failure,").append(" message: The quantity ").append(quantity).append(" cannot be stored in the barn. Only: ").append(getTotalCapacity() - getOccupiedCapacity()).append(" free capacity");
         } else {
-            produceAndQuantities.put(produceName, quantity);
+            String produceName = produce.toLowerCase();
+            if (produceAndQuantities.containsKey(produceName)) {
+                produceAndQuantities.replace(produceName, produceAndQuantities.get(produceName), produceAndQuantities.get(produceName) + quantity);
+            } else {
+                produceAndQuantities.put(produceName, quantity);
+            }
+            addToOccupiedCapacity(quantity);
+            transactionMessage.append("success, produce: ").append(produceName).append(", quantity: ").append(quantity);
         }
-        addToOccupiedCapacity(quantity);
-        transactionHistory.append("Date: ").append(LocalDate.now()).append(", operation: addition, produce: ").append(produceName).append(", quantity: ").append(quantity).append("\n");
+        list.add(transactionMessage.toString());
+        Farm.appendToReport(list);
+        System.out.println(LocalDate.now().toString() + " " + transactionMessage);
+        CSVprocesser.csvUpdateBarnFile(dataFileName);
     }
 
     public void displayBarnStatus() {
-        System.out.println("\nBarn index: " + barnIndex + " - barn status:");
-        System.out.println("Total capacity: " + getTotalCapacity() + ", occupied capacity: " + getOccupiedCapacity() + ", free capacity: " + (getTotalCapacity() - getOccupiedCapacity()));
+        StringBuffer transactionMessage = new StringBuffer();
+        List<String> list = new ArrayList<>();
+        list.add(LocalDate.now().toString());
+        transactionMessage.append("operation: display barn info, status: success\n              Barn index: ").append(barnIndex);
+        transactionMessage.append("\n              Total capacity: ").append(getTotalCapacity()).append(", occupied capacity: ").append(getOccupiedCapacity()).append(", free capacity: ").append(getTotalCapacity() - getOccupiedCapacity());
 
         for (Map.Entry<String, Integer> entry : produceAndQuantities.entrySet()) {
-            System.out.println("Produce: " + entry.getKey() + ", quantity: " + entry.getValue());
+            transactionMessage.append("\n              Produce: ").append(entry.getKey()).append(", quantity: ").append(entry.getValue());
         }
+        list.add(transactionMessage.toString());
+        Farm.appendToReport(list);
+
+        System.out.println(LocalDate.now().toString() + " " + transactionMessage);
     }
 
     public void displayTransactionHistory() {
-        System.out.println("\nBarn index: " + barnIndex + " - transaction history:");
-        System.out.println(transactionHistory);
+//        StringBuffer transactionMessage = new StringBuffer();
+//        List<String> list = new ArrayList<>();
+//        list.add(LocalDate.now().toString());
+//        transactionMessage.append("operation: display barn, status: success")
+//        System.out.println("\nBarn index: " + barnIndex + " - transaction history:");
+//        System.out.println(transactionHistory);
+//        list.add(transactionMessage.toString());
+//        Farm.appendToReport(list);
     }
 }

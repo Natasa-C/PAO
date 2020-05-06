@@ -27,6 +27,10 @@ public class Animal {
         return id;
     }
 
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
     public boolean isMale(){
         return isMale;
     }
@@ -43,4 +47,6 @@ public class Animal {
             return months / 12 + " years and " + (months - (months / 12 * 12)) + " months";
         }
     }
+
+    public void removeAnimal(){}
 }
