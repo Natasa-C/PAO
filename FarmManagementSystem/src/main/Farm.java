@@ -1,5 +1,6 @@
 package main;
 
+import CSVProcessor.CSVprocesser;
 import animals.*;
 import barns.*;
 import budget.Wallet;
@@ -31,8 +32,8 @@ public class Farm {
         return farm_instance;
     }
 
-    public static String getDatesAndReportsPackagePath(){
-        return  datesAndReportsPackagePath;
+    public static String getDatesAndReportsPackagePath() {
+        return datesAndReportsPackagePath;
     }
 
     public static void appendToReport(List<String> lineToAppend) {
@@ -57,7 +58,7 @@ public class Farm {
 
     public static void main(String[] args) {
         Farm AliFarm = Farm.getFarm();
-        clearFile(Farm.reportFileName);
+//        clearFile(Farm.reportFileName);
 
 
 //        ANIMALS test
@@ -127,8 +128,8 @@ public class Farm {
 
 //        WALLET TEST
         System.out.println("\n\n\nWALLET test\n ");
-        Wallet wa = new Wallet("euro", "dataWallet.csv");
-        Wallet wl = new Wallet("leu", "dataWallet.csv");
+        Wallet wa = new Wallet("euro");
+        Wallet wl = new Wallet("leu");
         wa.addMoney(100);
         wa.withdrawMoney(25);
         wa.addMoney(2530);
@@ -137,5 +138,8 @@ public class Farm {
         wa.withdrawMoney(3000);
         wa.displayWalletStatus();
         wa.displayTransactionHistory();
+
+        CSVprocesser.csvLoadFile("dataWallet.csv");
+
     }
 }

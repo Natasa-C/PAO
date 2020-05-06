@@ -1,9 +1,11 @@
 package animals;
 
+import barns.Barn;
 import datesAndReports.BuildHeader;
+import datesAndReports.BuildHeaderForBarn;
 import datesAndReports.BuildHeaderForChicken;
+import CSVProcessor.CSVprocesser;
 import datesAndReports.BuildHeaderForRabbit;
-import main.CSVprocesser;
 import main.Farm;
 
 import java.time.LocalDate;
@@ -14,7 +16,7 @@ import java.util.Map;
 
 public class Chicken extends Animal {
     private static String dataFileName = "dataChicken.csv";
-    private static List<Chicken> chickenList = new ArrayList<>();
+    private static List<Chicken> chickenList = null;
     private static Integer noChickens = 0;
     private static Integer index = 0;
     private static Integer noMales = 0;
@@ -30,9 +32,13 @@ public class Chicken extends Animal {
 
         BuildHeader<Chicken> headerBuilder = new BuildHeaderForChicken();
         if (!Farm.checkIfCSVFileExists(dataFileName)) {
+            chickenList = new ArrayList<>();
             Farm.clearFile(dataFileName);
             Farm.appendToFile(dataFileName, headerBuilder.getHeaderLine());
+        } else if (chickenList == null) {
+            chickenList = CSVprocesser.getObjectListFromCSVChicken(dataFileName);
         }
+        chickenList.add(this);
 
         StringBuffer transactionMessage = new StringBuffer();
         List<String> list = new ArrayList<>();
@@ -43,7 +49,6 @@ public class Chicken extends Animal {
         Farm.appendToReport(list);
         Farm.appendToFile(dataFileName, headerBuilder.getEntryLine(this));
         System.out.println(LocalDate.now().toString() + " " + transactionMessage);
-        chickenList.add(this);
     }
 
     public Chicken(String dateOfBirth, boolean isMale) {
@@ -56,9 +61,13 @@ public class Chicken extends Animal {
 
         BuildHeader<Chicken> headerBuilder = new BuildHeaderForChicken();
         if (!Farm.checkIfCSVFileExists(dataFileName)) {
+            chickenList = new ArrayList<>();
             Farm.clearFile(dataFileName);
             Farm.appendToFile(dataFileName, headerBuilder.getHeaderLine());
+        } else if (chickenList == null) {
+            chickenList = CSVprocesser.getObjectListFromCSVChicken(dataFileName);
         }
+        chickenList.add(this);
 
         StringBuffer transactionMessage = new StringBuffer();
         List<String> list = new ArrayList<>();
@@ -69,7 +78,15 @@ public class Chicken extends Animal {
         Farm.appendToReport(list);
         Farm.appendToFile(dataFileName, headerBuilder.getEntryLine(this));
         System.out.println(LocalDate.now().toString() + " " + transactionMessage);
-        chickenList.add(this);
+    }
+
+    public Chicken(String id, LocalDate dateOfBirth, boolean isMale) {
+        super("rabbit", index, isMale);
+        noChickens++;
+        index++;
+        if (isMale) {
+            noMales++;
+        }
     }
 
     public static List<Chicken> getChickenListList() {
@@ -83,7 +100,7 @@ public class Chicken extends Animal {
             noMales--;
         }
         chickenList.remove(this);
-        CSVprocesser.csvUpdateChickenFile(dataFileName);
+        CSVprocesser.<Chicken>csvUpdateFile(dataFileName, new BuildHeaderForChicken(), chickenList);
     }
 
     @Override

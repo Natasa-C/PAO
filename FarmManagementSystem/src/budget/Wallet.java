@@ -2,7 +2,7 @@ package budget;
 
 import datesAndReports.BuildHeader;
 import datesAndReports.BuildHeaderForWallet;
-import main.CSVprocesser;
+import CSVProcessor.CSVprocesser;
 import main.Farm;
 
 import java.time.LocalDate;
@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Wallet {
-    private static List<Wallet> walletList;
-    private static String dataFileName;
+public class Wallet{
+    private static List<Wallet> walletList = null;
+    private static String dataFileName = "dataWallet.csv";
     private static Integer noWallets = 0;
     private final String walletIndex;
     private final Integer maxWalletLimit;
@@ -20,21 +20,19 @@ public class Wallet {
     private final String currency;
     private StringBuffer transactionHistory = new StringBuffer("\nTransaction history:\n");
 
-    public Wallet(String currency, String dataFileName) {
+    public Wallet(String currency) {
         noWallets++;
         walletIndex = UUID.randomUUID().toString();
         this.maxWalletLimit = Integer.MAX_VALUE - 1;
         this.currency = currency.toLowerCase();
-        Wallet.dataFileName = dataFileName;
 
         BuildHeader<Wallet> headerBuilder = new BuildHeaderForWallet();
         if (!Farm.checkIfCSVFileExists(dataFileName)) {
             walletList = new ArrayList<>();
             Farm.clearFile(dataFileName);
             Farm.appendToFile(dataFileName, headerBuilder.getHeaderLine());
-        }
-        else{
-            walletList = CSVprocesser.csvLoadWalletFile(dataFileName);
+        } else if (walletList == null) {
+            walletList = CSVprocesser.getObjectListFromCSV(dataFileName);
         }
         walletList.add(this);
 
@@ -49,12 +47,15 @@ public class Wallet {
         System.out.println(LocalDate.now().toString() + " " + transactionMessage);
     }
 
-    public Wallet(String walletIndex, Integer moneyInWallet, String currency, Integer maxWalletLimit){
+    public Wallet(String walletIndex, Integer moneyInWallet, String currency, Integer maxWalletLimit) {
+//        Class that shoul only be used when loading items from file
         this.walletIndex = walletIndex;
         this.moneyInWallet = moneyInWallet;
         this.maxWalletLimit = maxWalletLimit;
         this.currency = currency;
+        noWallets++;
     }
+
     public void setSumInWallet(Integer sumInWallet) {
         this.moneyInWallet = sumInWallet;
     }
@@ -70,6 +71,7 @@ public class Wallet {
     public Integer getmaxWalletLimit() {
         return maxWalletLimit;
     }
+
     public String getmaxWalletIndex() {
         return walletIndex;
     }
@@ -98,7 +100,7 @@ public class Wallet {
         list.add(transactionMessage.toString());
         Farm.appendToReport(list);
         System.out.println(LocalDate.now().toString() + " " + transactionMessage);
-        CSVprocesser.csvUpdateWalletFile(dataFileName);
+        CSVprocesser.<Wallet>csvUpdateFile(dataFileName, new BuildHeaderForWallet(), walletList);
     }
 
     public void withdrawMoney(Integer sum) {
@@ -116,7 +118,7 @@ public class Wallet {
         list.add(transactionMessage.toString());
         Farm.appendToReport(list);
         System.out.println(LocalDate.now().toString() + " " + transactionMessage);
-        CSVprocesser.csvUpdateWalletFile(dataFileName);
+        CSVprocesser.<Wallet>csvUpdateFile(dataFileName, new BuildHeaderForWallet(), walletList);
     }
 
     public void displayWalletStatus() {

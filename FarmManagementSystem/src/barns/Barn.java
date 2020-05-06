@@ -3,8 +3,8 @@ package barns;
 import budget.Wallet;
 import datesAndReports.BuildHeader;
 import datesAndReports.BuildHeaderForBarn;
+import CSVProcessor.CSVprocesser;
 import datesAndReports.BuildHeaderForWallet;
-import main.CSVprocesser;
 import main.Farm;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.time.LocalDate;
 
 public class Barn extends Building {
     private static String dataFileName = "dataBarn.csv";
-    private static List<Barn> barnList = new ArrayList<>();
+    private static List<Barn> barnList = null;
     private static Integer noBarns = 0;
     private final Integer barnIndex;
     private final Integer totalCapacity;
@@ -28,13 +28,17 @@ public class Barn extends Building {
         this.totalCapacity = length * height * width;
         noBarns++;
         this.barnIndex = noBarns;
-        barnList.add(this);
 
         BuildHeader<Barn> headerBuilder = new BuildHeaderForBarn();
         if (!Farm.checkIfCSVFileExists(dataFileName)) {
+            barnList = new ArrayList<>();
             Farm.clearFile(dataFileName);
             Farm.appendToFile(dataFileName, headerBuilder.getHeaderLine());
         }
+        else if (barnList == null) {
+            barnList = CSVprocesser.getObjectListFromCSVBarn(dataFileName);
+        }
+        barnList.add(this);
 
         StringBuffer transactionMessage = new StringBuffer();
         List<String> list = new ArrayList<>();
@@ -45,6 +49,14 @@ public class Barn extends Building {
         Farm.appendToReport(list);
         Farm.appendToFile(dataFileName, headerBuilder.getEntryLine(this));
         System.out.println(LocalDate.now().toString() + " " + transactionMessage);
+    }
+
+    public Barn(Integer length, Integer width, Integer height, Integer barnIndex, Integer totalCapacity, Integer occupiedCapacity){
+        super(length, width, height);
+        this.barnIndex = barnIndex;
+        this.totalCapacity = totalCapacity;
+        this.occupiedCapacity = occupiedCapacity;
+        noBarns++;
     }
 
     public Integer getTotalCapacity() {
@@ -88,7 +100,7 @@ public class Barn extends Building {
         list.add(transactionMessage.toString());
         Farm.appendToReport(list);
         System.out.println(LocalDate.now().toString() + " " + transactionMessage);
-        CSVprocesser.csvUpdateBarnFile(dataFileName);
+        CSVprocesser.<Barn>csvUpdateFile(dataFileName, new BuildHeaderForBarn(), barnList);
     }
 
     public void displayBarnStatus() {

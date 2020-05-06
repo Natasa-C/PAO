@@ -4,7 +4,7 @@ import barns.Barn;
 import datesAndReports.BuildHeader;
 import datesAndReports.BuildHeaderForBarn;
 import datesAndReports.BuildHeaderForRabbit;
-import main.CSVprocesser;
+import CSVProcessor.CSVprocesser;
 import main.Farm;
 
 import java.time.LocalDate;
@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class Rabbit extends Animal {
     private static String dataFileName = "dataRabbit.csv";
-    private static List<Rabbit> rabbitList = new ArrayList<>();
+    private static List<Rabbit> rabbitList = null;
     private static Integer noRabbits = 0;
     private static Integer index = 0;
     private static Integer noMales = 0;
@@ -31,9 +31,13 @@ public class Rabbit extends Animal {
 
         BuildHeader<Rabbit> headerBuilder = new BuildHeaderForRabbit();
         if (!Farm.checkIfCSVFileExists(dataFileName)) {
+            rabbitList = new ArrayList<>();
             Farm.clearFile(dataFileName);
             Farm.appendToFile(dataFileName, headerBuilder.getHeaderLine());
+        } else if (rabbitList == null) {
+            rabbitList = CSVprocesser.getObjectListFromCSVRabbit(dataFileName);
         }
+        rabbitList.add(this);
 
         StringBuffer transactionMessage = new StringBuffer();
         List<String> list = new ArrayList<>();
@@ -44,7 +48,6 @@ public class Rabbit extends Animal {
         Farm.appendToReport(list);
         Farm.appendToFile(dataFileName, headerBuilder.getEntryLine(this));
         System.out.println(LocalDate.now().toString() + " " + transactionMessage);
-        rabbitList.add(this);
     }
 
     public Rabbit(String dateOfBirth, boolean isMale) {
@@ -57,9 +60,13 @@ public class Rabbit extends Animal {
 
         BuildHeader<Rabbit> headerBuilder = new BuildHeaderForRabbit();
         if (!Farm.checkIfCSVFileExists(dataFileName)) {
+            rabbitList = new ArrayList<>();
             Farm.clearFile(dataFileName);
             Farm.appendToFile(dataFileName, headerBuilder.getHeaderLine());
+        } else if (rabbitList == null) {
+            rabbitList = CSVprocesser.getObjectListFromCSVRabbit(dataFileName);
         }
+        rabbitList.add(this);
 
         StringBuffer transactionMessage = new StringBuffer();
         List<String> list = new ArrayList<>();
@@ -70,7 +77,15 @@ public class Rabbit extends Animal {
         Farm.appendToReport(list);
         Farm.appendToFile(dataFileName, headerBuilder.getEntryLine(this));
         System.out.println(LocalDate.now().toString() + " " + transactionMessage);
-        rabbitList.add(this);
+    }
+
+    public Rabbit(String id, LocalDate dateOfBirth, boolean isMale) {
+        super("rabbit", index, isMale);
+        noRabbits++;
+        index++;
+        if (isMale) {
+            noMales++;
+        }
     }
 
     public static List<Rabbit> getRabbitList() {
@@ -84,7 +99,7 @@ public class Rabbit extends Animal {
             noMales--;
         }
         rabbitList.remove(this);
-        CSVprocesser.csvUpdateRabbitFile(dataFileName);
+        CSVprocesser.<Rabbit>csvUpdateFile(dataFileName, new BuildHeaderForRabbit(), rabbitList);
     }
 
     @Override
