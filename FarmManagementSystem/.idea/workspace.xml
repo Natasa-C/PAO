@@ -23,6 +23,10 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/jarLib/mysql-connector-java-8.0.20.jar!/" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.23008847" />
     <property name="show.unlinked.gradle.project.popup" value="false" />
   </component>
   <component name="RecentsManager">
@@ -30,7 +34,7 @@
       <recent name="D:\FarmManagementSystem\src\datesAndReports" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Farm">
+  <component name="RunManager" selected="Application.FarmDB">
     <configuration name="CloneExample" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="CSVProcessor.CloneExample" />
       <module name="FarmManagementSystem" />
@@ -57,6 +61,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="FarmDB" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="main.FarmDB" />
+      <module name="FarmManagementSystem" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="main.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ReflectionExample" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="CSVProcessor.ReflectionExample" />
       <module name="FarmManagementSystem" />
@@ -72,6 +89,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.FarmDB" />
         <item itemvalue="Application.Farm" />
         <item itemvalue="Application.ReflectionExample" />
         <item itemvalue="Application.CloneExample" />
@@ -95,6 +113,10 @@
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.csv" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="361" y="71" key="#Project_Structure" timestamp="1591810376625">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="361" y="71" key="#Project_Structure/0.0.1536.824@0.0.1536.824" timestamp="1591810376625" />
     <state x="523" y="215" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1588725063708">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -103,25 +125,29 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="574" y="121" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1588759404435" />
-    <state width="1493" height="96" key="GridCell.Tab.0.bottom" timestamp="1588761799378">
+    <state x="473" y="154" key="FileChooserDialogImpl" timestamp="1591810370687">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="96" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1588761799378" />
-    <state width="1493" height="96" key="GridCell.Tab.0.center" timestamp="1588761799378">
+    <state x="473" y="154" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1591810370687" />
+    <state width="1493" height="192" key="GridCell.Tab.0.bottom" timestamp="1591869172687">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="96" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1588761799378" />
-    <state width="1493" height="96" key="GridCell.Tab.0.left" timestamp="1588761799378">
+    <state width="1493" height="192" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1591869172687" />
+    <state width="1493" height="192" key="GridCell.Tab.0.center" timestamp="1591869172684">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="96" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1588761799378" />
-    <state width="1493" height="96" key="GridCell.Tab.0.right" timestamp="1588761799378">
+    <state width="1493" height="192" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1591869172684" />
+    <state width="1493" height="192" key="GridCell.Tab.0.left" timestamp="1591869172684">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="96" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1588761799378" />
-    <state x="465" y="236" key="com.intellij.ide.util.TipDialog" timestamp="1588761816383">
+    <state width="1493" height="192" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1591869172684" />
+    <state width="1493" height="192" key="GridCell.Tab.0.right" timestamp="1591869172684">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="465" y="236" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1588761816383" />
+    <state width="1493" height="192" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1591869172684" />
+    <state x="465" y="236" key="com.intellij.ide.util.TipDialog" timestamp="1591855291608">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="465" y="236" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1591855291608" />
   </component>
 </project>
